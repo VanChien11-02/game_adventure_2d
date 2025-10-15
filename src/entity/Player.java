@@ -1,14 +1,12 @@
-package main.entity;
+package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.object.obj_shield_wood;
-import main.object.obj_sword_normal;
+import object.obj_shield_wood;
+import object.obj_sword_normal;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Player extends Entity{
     KeyHandler KeyH;

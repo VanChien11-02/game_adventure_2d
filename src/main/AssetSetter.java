@@ -1,9 +1,9 @@
 package main;
 
-import main.entity.NPC_oldMan;
-import main.monster.green_slime;
-import main.monster.red_slime;
-import main.object.*;
+import entity.NPC_oldMan;
+import monster.green_slime;
+import monster.red_slime;
+import object.*;
 
 // thiết lập tài sản (object)
 public class AssetSetter {

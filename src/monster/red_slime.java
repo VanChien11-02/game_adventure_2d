@@ -1,24 +1,24 @@
-package main.monster;
+package monster;
 
 import main.GamePanel;
-import main.entity.Entity;
+import entity.Entity;
 
 import java.util.Random;
 
-public class green_slime extends Entity {
+public class red_slime extends Entity {
     GamePanel gp;
-    public green_slime(GamePanel gp) {
+    public red_slime(GamePanel gp) {
         super(gp);
         this.gp = gp;
         type = 2;
-        name = "Green Slime";
-        speed = 1;
-//        monsterDamage = 1;
-        maxLife = 4;
+        name = "Red slime";
+//        monsterDamage = 2;
+        speed = 2;
+        maxLife = 6;
         life = maxLife;
-        attack = 2;
+        attack = 3;
         defense = 0;
-        exp = 3;
+        exp = 5;
 
         solidArea.x = 3;
         solidArea.y = 16;
@@ -30,14 +30,14 @@ public class green_slime extends Entity {
         getImage();
     }
     public void getImage(){
-        up1 = setup("/monster/greenslime_down_1", gp.title_size, gp.title_size);
-        up2 = setup("/monster/greenslime_down_2", gp.title_size, gp.title_size);
-        down1 = setup("/monster/greenslime_down_1", gp.title_size, gp.title_size);
-        down2 = setup("/monster/greenslime_down_2", gp.title_size, gp.title_size);
-        left1 = setup("/monster/greenslime_down_1", gp.title_size, gp.title_size);
-        left2 = setup("/monster/greenslime_down_2", gp.title_size, gp.title_size);
-        right1 = setup("/monster/greenslime_down_1", gp.title_size, gp.title_size);
-        right2 = setup("/monster/greenslime_down_2", gp.title_size, gp.title_size);
+        up1 = setup("/monster/redslime_down_1", gp.title_size, gp.title_size);
+        up2 = setup("/monster/redslime_down_2", gp.title_size, gp.title_size);
+        down1 = setup("/monster/redslime_down_1", gp.title_size, gp.title_size);
+        down2 = setup("/monster/redslime_down_2", gp.title_size, gp.title_size);
+        left1 = setup("/monster/redslime_down_1", gp.title_size, gp.title_size);
+        left2 = setup("/monster/redslime_down_2", gp.title_size, gp.title_size);
+        right1 = setup("/monster/redslime_down_1", gp.title_size, gp.title_size);
+        right2 = setup("/monster/redslime_down_2", gp.title_size, gp.title_size);
     }
 
     public void setAction() {

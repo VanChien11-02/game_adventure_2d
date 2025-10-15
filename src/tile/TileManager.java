@@ -1,4 +1,4 @@
-package main.tile;
+package tile;
 
 import main.GamePanel;
 import main.UtilityTool;

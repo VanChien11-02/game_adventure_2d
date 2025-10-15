@@ -1,6 +1,6 @@
 package main;
 
-import main.entity.Entity;
+import entity.Entity;
 /* top
        ______________
     * |             | right

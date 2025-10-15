@@ -1,8 +1,8 @@
 package main;
 
-import main.entity.Entity;
-import main.entity.Player;
-import main.tile.TileManager;
+import entity.Entity;
+import entity.Player;
+import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,7 @@
-package main.object;
+package object;
 
 import main.GamePanel;
-import main.entity.Entity;
+import entity.Entity;
 
 public class obj_door extends Entity {
     public obj_door(GamePanel gp){
