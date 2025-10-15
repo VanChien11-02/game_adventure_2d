@@ -19,7 +19,7 @@ public class Entity {
 
     //state
     //public int x, y; to player
-    public int worldX, worldY;
+    public int worldX, worldY;  //pixel
     public String direction = "down";
 
 //    public int spriteCounter = 0; // đếm ảnh

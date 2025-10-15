@@ -6,7 +6,7 @@ import java.awt.event.*;
 public class KeyHandler implements KeyListener {
     GamePanel gp;
     public boolean leftPressed, rightPressed, upPressed, downPressed, enterPressd;
-    boolean checkDrawTime = false;
+    boolean showDebugText = false; //to show time and position
 
     public KeyHandler(GamePanel gp){
         this.gp = gp;
@@ -89,11 +89,14 @@ public class KeyHandler implements KeyListener {
         }
         //debug
         if (code == KeyEvent.VK_T) {
-            if (!checkDrawTime) {
-                checkDrawTime = true;
+            if (!showDebugText) {
+                showDebugText = true;
             } else {
-                checkDrawTime = false;
+                showDebugText = false;
             }
+        }
+        if (code == KeyEvent.VK_M){ //to change some tile when play game (don't need to exit game)
+            gp.tileM.loadMap("/maps/worldV2.txt"); // but change map -> res -> maps -> rebuild -> M
         }
     }
 
