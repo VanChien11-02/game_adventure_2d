@@ -74,7 +74,7 @@ public class Entity {
     //item attributes
     public int attackValue;
     public int defenseValue;
-
+    public String description = "";
     //Object
     public BufferedImage image, image2, image3;
     public boolean collision = false;
@@ -182,10 +182,10 @@ public class Entity {
         int screenX = worldX - gp.player.worldX + gp.player.screenX;//to put entity at the center
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
         //just draw in the screen( improve efficiency( hiệu suất))
-        if(worldX + gp.title_size > gp.player.worldX - gp.player.screenX &&
-                worldX - gp.title_size < gp.player.worldX + gp.player.screenX &&
-                worldY + gp.title_size > gp.player.worldY - gp.player.screenY &&
-                worldY - gp.title_size < gp.player.worldY + gp.player.screenY) {
+        if(worldX + gp.tile_size > gp.player.worldX - gp.player.screenX &&
+                worldX - gp.tile_size < gp.player.worldX + gp.player.screenX &&
+                worldY + gp.tile_size > gp.player.worldY - gp.player.screenY &&
+                worldY - gp.tile_size < gp.player.worldY + gp.player.screenY) {
 
             switch (direction){
                 case "up":
@@ -225,11 +225,11 @@ public class Entity {
 
             //monster HP bar
             if(type == 2 && hpBarOn) {
-                double oneScale = (double)gp.title_size/maxLife;
+                double oneScale = (double)gp.tile_size /maxLife;
                 double hpBarValue = oneScale * life;
 
                 g2.setColor(new Color(35,35,35));
-                g2.fillRect(screenX - 1, screenY - 16, gp.title_size + 2, 12);
+                g2.fillRect(screenX - 1, screenY - 16, gp.tile_size + 2, 12);
 
                 g2.setColor(new Color(255, 0, 30));
                 g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
@@ -248,7 +248,7 @@ public class Entity {
             if(dying){
                 dyingAnimation(g2);
             }
-            g2.drawImage(image, screenX, screenY, gp.title_size, gp.title_size, null);
+            g2.drawImage(image, screenX, screenY, gp.tile_size, gp.tile_size, null);
             //reset alpha
             changeAlpha(g2, 1f);
         }

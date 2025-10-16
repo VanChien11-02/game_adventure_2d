@@ -57,7 +57,7 @@ public class TileManager {
         try {
             tile[index] = new Tile();
             tile[index].image = ImageIO.read(getClass().getResourceAsStream("/tiles/" + imageName + ".png"));
-            tile[index].image = uTool.scaleImage(tile[index].image, gp.title_size, gp.title_size);
+            tile[index].image = uTool.scaleImage(tile[index].image, gp.tile_size, gp.tile_size);
             tile[index].collision = collision;
         } catch (IOException e){
             e.printStackTrace();
@@ -93,15 +93,15 @@ public class TileManager {
         while(col < gp.maxWorldCol && row < gp.maxWorldRow){
             int nums = mapIileNum[col][row];
             // worldX, world is distance to mapTileNum[0][0]
-            int worldX = col * gp.title_size;
-            int worldY = row * gp.title_size;
+            int worldX = col * gp.tile_size;
+            int worldY = row * gp.tile_size;
             int screenX = worldX - gp.player.worldX + gp.player.screenX;//to put player at the center
             int screenY = worldY - gp.player.worldY + gp.player.screenY;
             //just draw in the screen( improve efficiency( hiệu suất))
-            if(worldX + gp.title_size > gp.player.worldX - gp.player.screenX &&
-               worldX - gp.title_size < gp.player.worldX + gp.player.screenX &&
-               worldY + gp.title_size > gp.player.worldY - gp.player.screenY &&
-               worldY - gp.title_size < gp.player.worldY + gp.player.screenY) {
+            if(worldX + gp.tile_size > gp.player.worldX - gp.player.screenX &&
+               worldX - gp.tile_size < gp.player.worldX + gp.player.screenX &&
+               worldY + gp.tile_size > gp.player.worldY - gp.player.screenY &&
+               worldY - gp.tile_size < gp.player.worldY + gp.player.screenY) {
                 g2.drawImage(tile[nums].image, screenX, screenY, null);
             }
             col++;

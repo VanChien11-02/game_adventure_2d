@@ -2,11 +2,11 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import object.obj_shield_wood;
-import object.obj_sword_normal;
+import object.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Entity{
     KeyHandler KeyH;
@@ -16,12 +16,14 @@ public class Player extends Entity{
     public final int screenY;
     int standCount = 0; // count stand player
     public boolean attackCanceled = false;
+    public ArrayList<Entity> inventory= new ArrayList<>();
+    public final int maxInventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler KeyH){
         super(gp); //call super class play and insert gp -> class entity can work
         this.KeyH = KeyH;
-        screenX = gp.ScreenWidth / 2 - (gp.title_size / 2);
-        screenY = gp.ScreenHeight / 2 - (gp.title_size / 2);
+        screenX = gp.ScreenWidth / 2 - (gp.tile_size / 2);
+        screenY = gp.ScreenHeight / 2 - (gp.tile_size / 2);
 
         //solidArea = new Rectangle(0, 16, 32, 32);
         solidArea = new Rectangle();
@@ -38,12 +40,13 @@ public class Player extends Entity{
         setDefaultValues();
         getPlayerImage();
         getPLayerAttackImage();
+        setItem();
     }
     public void setDefaultValues(){
 //        x = 100;
 //        y = 100;
-        worldX = gp.title_size * 23; // starting location of player
-        worldY = gp.title_size * 21;
+        worldX = gp.tile_size * 23; // starting location of player
+        worldY = gp.tile_size * 21;
         speed = 4;
         direction = "down";
 
@@ -62,6 +65,14 @@ public class Player extends Entity{
         defense = getDefense();
     }
 
+    public void setItem() {
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new obj_key(gp));
+        inventory.add(new obj_chest(gp));
+        inventory.add(new obj_boots(gp));
+    }
+
     public int getAttack(){
         return strength * currentWeapon.attackValue;
     }
@@ -71,25 +82,25 @@ public class Player extends Entity{
     }
 
     public void getPlayerImage(){
-        up1 = setup("/player/boy_up_1", gp.title_size, gp.title_size);
-        up2 = setup("/player/boy_up_2", gp.title_size, gp.title_size);
-        down1 = setup("/player/boy_down_1", gp.title_size, gp.title_size);
-        down2 = setup("/player/boy_down_2", gp.title_size, gp.title_size);
-        left1 = setup("/player/boy_left_1", gp.title_size, gp.title_size);
-        left2 = setup("/player/boy_left_2", gp.title_size, gp.title_size);
-        right1 = setup("/player/boy_right_1", gp.title_size, gp.title_size);
-        right2 = setup("/player/boy_right_2", gp.title_size, gp.title_size);
+        up1 = setup("/player/boy_up_1", gp.tile_size, gp.tile_size);
+        up2 = setup("/player/boy_up_2", gp.tile_size, gp.tile_size);
+        down1 = setup("/player/boy_down_1", gp.tile_size, gp.tile_size);
+        down2 = setup("/player/boy_down_2", gp.tile_size, gp.tile_size);
+        left1 = setup("/player/boy_left_1", gp.tile_size, gp.tile_size);
+        left2 = setup("/player/boy_left_2", gp.tile_size, gp.tile_size);
+        right1 = setup("/player/boy_right_1", gp.tile_size, gp.tile_size);
+        right2 = setup("/player/boy_right_2", gp.tile_size, gp.tile_size);
     }
 
     public void getPLayerAttackImage(){
-        attackUp1 = setup("/player/boy_attack_up_1", gp.title_size, gp.title_size*2);
-        attackUp2 = setup("/player/boy_attack_up_2", gp.title_size, gp.title_size * 2);
-        attackDown1 = setup("/player/boy_attack_down_1", gp.title_size, gp.title_size * 2);
-        attackDown2 = setup("/player/boy_attack_down_2", gp.title_size, gp.title_size * 2);
-        attackLeft1 = setup("/player/boy_attack_left_1", gp.title_size * 2, gp.title_size);
-        attackLeft2 = setup("/player/boy_attack_left_2", gp.title_size * 2, gp.title_size);
-        attackRight1 = setup("/player/boy_attack_right_1", gp.title_size * 2, gp.title_size);
-        attackRight2 = setup("/player/boy_attack_right_2", gp.title_size * 2, gp.title_size);
+        attackUp1 = setup("/player/boy_attack_up_1", gp.tile_size, gp.tile_size *2);
+        attackUp2 = setup("/player/boy_attack_up_2", gp.tile_size, gp.tile_size * 2);
+        attackDown1 = setup("/player/boy_attack_down_1", gp.tile_size, gp.tile_size * 2);
+        attackDown2 = setup("/player/boy_attack_down_2", gp.tile_size, gp.tile_size * 2);
+        attackLeft1 = setup("/player/boy_attack_left_1", gp.tile_size * 2, gp.tile_size);
+        attackLeft2 = setup("/player/boy_attack_left_2", gp.tile_size * 2, gp.tile_size);
+        attackRight1 = setup("/player/boy_attack_right_1", gp.tile_size * 2, gp.tile_size);
+        attackRight2 = setup("/player/boy_attack_right_2", gp.tile_size * 2, gp.tile_size);
     }
     public void update(){ //update 60time/second
         if(attacking) {
@@ -350,7 +361,7 @@ public class Player extends Entity{
                         image = up2;
                     }
                 } else{
-                    tempScreenY = screenY - gp.title_size;
+                    tempScreenY = screenY - gp.tile_size;
                     if (attackNum == 1) {
                         image = attackUp1;
                     }
@@ -385,7 +396,7 @@ public class Player extends Entity{
                         image = left2;
                     }
                 } else{
-                    tempScreenX = screenX - gp.title_size;
+                    tempScreenX = screenX - gp.tile_size;
                     if (attackNum == 1) {
                         image = attackLeft1;
                     }

@@ -30,14 +30,14 @@ public class red_slime extends Entity {
         getImage();
     }
     public void getImage(){
-        up1 = setup("/monster/redslime_down_1", gp.title_size, gp.title_size);
-        up2 = setup("/monster/redslime_down_2", gp.title_size, gp.title_size);
-        down1 = setup("/monster/redslime_down_1", gp.title_size, gp.title_size);
-        down2 = setup("/monster/redslime_down_2", gp.title_size, gp.title_size);
-        left1 = setup("/monster/redslime_down_1", gp.title_size, gp.title_size);
-        left2 = setup("/monster/redslime_down_2", gp.title_size, gp.title_size);
-        right1 = setup("/monster/redslime_down_1", gp.title_size, gp.title_size);
-        right2 = setup("/monster/redslime_down_2", gp.title_size, gp.title_size);
+        up1 = setup("/monster/redslime_down_1", gp.tile_size, gp.tile_size);
+        up2 = setup("/monster/redslime_down_2", gp.tile_size, gp.tile_size);
+        down1 = setup("/monster/redslime_down_1", gp.tile_size, gp.tile_size);
+        down2 = setup("/monster/redslime_down_2", gp.tile_size, gp.tile_size);
+        left1 = setup("/monster/redslime_down_1", gp.tile_size, gp.tile_size);
+        left2 = setup("/monster/redslime_down_2", gp.tile_size, gp.tile_size);
+        right1 = setup("/monster/redslime_down_1", gp.tile_size, gp.tile_size);
+        right2 = setup("/monster/redslime_down_2", gp.tile_size, gp.tile_size);
     }
 
     public void setAction() {

@@ -14,12 +14,12 @@ import java.util.Comparator;
 public class GamePanel extends JPanel implements Runnable{
     final int originalTitleSize = 16; //final: ko đổi đc, 16x16 size of player
     final int scale = 3; //chia màn hình
-    public final int title_size = originalTitleSize * scale; // 48x48
+    public final int tile_size = originalTitleSize * scale; // 48x48
 
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12; //  16 cot x 12 hang
-    public final int ScreenWidth = title_size * maxScreenCol; //768 pixels
-    public final int ScreenHeight = title_size * maxScreenRow; //576 pixels
+    public final int ScreenWidth = tile_size * maxScreenCol; //768 pixels
+    public final int ScreenHeight = tile_size * maxScreenRow; //576 pixels
 
     //setting World
     public final int maxWorldCol = 50; // can change whatever you want to size of world
@@ -208,9 +208,9 @@ public class GamePanel extends JPanel implements Runnable{
                 y+=lineHeight;
                 g2.drawString("World Y " + player.worldY, x, y);
                 y+=lineHeight;
-                g2.drawString("col " + (player.worldX + player.solidArea.x)/title_size, x, y);
+                g2.drawString("col " + (player.worldX + player.solidArea.x)/ tile_size, x, y);
                 y+=lineHeight;
-                g2.drawString("row " + (player.worldY + player.solidArea.y)/title_size, x, y);
+                g2.drawString("row " + (player.worldY + player.solidArea.y)/ tile_size, x, y);
                 y+=lineHeight;
 
                 g2.drawString("Time: " + passed, x, y);

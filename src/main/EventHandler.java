@@ -1,7 +1,5 @@
 package main;
 
-import java.awt.*;
-
 public class EventHandler {
     GamePanel gp;
     // when player touch, event just happen 1 time, but if player go outside the rect, this can happen again
@@ -36,7 +34,7 @@ public class EventHandler {
         int DistanceX = Math.abs(gp.player.worldX - previousEventX);
         int DistanceY = Math.abs(gp.player.worldY - previousEventY);
         int Distance = Math.max(DistanceX, DistanceY);
-        if(Distance > gp.title_size){ // can change tile_size * 2
+        if(Distance > gp.tile_size){ // can change tile_size * 2
             canTouchEvent = true;
         }
         if(canTouchEvent) {
@@ -56,8 +54,8 @@ public class EventHandler {
         boolean hit = false;
         gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
-        eventRect[col][row].x = col*gp.title_size + eventRect[col][row].x;
-        eventRect[col][row].y = row*gp.title_size + eventRect[col][row].y;
+        eventRect[col][row].x = col*gp.tile_size + eventRect[col][row].x;
+        eventRect[col][row].y = row*gp.tile_size + eventRect[col][row].y;
 
         //check player collision event
         if(gp.player.solidArea.intersects(eventRect[col][row]) && !eventRect[col][row].eventDone){
@@ -101,7 +99,7 @@ public class EventHandler {
     public void teleport(int gameState){
         gp.gameState = gameState;
         gp.ui.currentDialogue = "Teleport!";
-        gp.player.worldX = gp.title_size * 37;
-        gp.player.worldY = gp.title_size * 10;
+        gp.player.worldX = gp.tile_size * 37;
+        gp.player.worldY = gp.tile_size * 10;
     }
 }
