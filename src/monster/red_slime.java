@@ -10,7 +10,7 @@ public class red_slime extends Entity {
     public red_slime(GamePanel gp) {
         super(gp);
         this.gp = gp;
-        type = 2;
+        type = typeMonster;
         name = "Red slime";
 //        monsterDamage = 2;
         speed = 2;

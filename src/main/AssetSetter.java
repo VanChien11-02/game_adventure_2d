@@ -31,6 +31,26 @@ public class AssetSetter {
         gp.obj[3] = new obj_door(gp);
         gp.obj[2].worldX = gp.tile_size * 21;
         gp.obj[2].worldY = gp.tile_size * 22;
+
+        gp.obj[4] = new obj_key(gp);
+        gp.obj[4].worldX = gp.tile_size * 25;
+        gp.obj[4].worldY = gp.tile_size * 19;
+
+        gp.obj[5] = new obj_key(gp);
+        gp.obj[5].worldX = gp.tile_size * 26;
+        gp.obj[5].worldY = gp.tile_size * 21;
+
+        gp.obj[6] = new obj_shield_blue(gp);
+        gp.obj[6].worldX = gp.tile_size * 28;
+        gp.obj[6].worldY = gp.tile_size * 21;
+
+        gp.obj[7] = new obj_axe(gp);
+        gp.obj[7].worldX = gp.tile_size * 22;
+        gp.obj[7].worldY = gp.tile_size * 21;
+
+        gp.obj[8] = new obj_potion_red(gp);
+        gp.obj[8].worldX = gp.tile_size * 35;
+        gp.obj[8].worldY = gp.tile_size * 21;
     }
 
     public void setNPC(){

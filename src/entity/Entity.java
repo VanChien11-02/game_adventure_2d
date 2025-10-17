@@ -55,7 +55,6 @@ public class Entity {
     int dialogueIndex = 0;
 
     //Character attributes
-    public int type; // 0 = player, 1 = npc, 2 = monster
     public String name;
     public int speed;
     public int maxLife;
@@ -75,9 +74,20 @@ public class Entity {
     public int attackValue;
     public int defenseValue;
     public String description = "";
+
     //Object
     public BufferedImage image, image2, image3;
     public boolean collision = false;
+
+    //type entity, weapon, (obj future)
+    public int type; // 0 = player, 1 = npc, 2 = monster
+    public final int typePlayer = 0;
+    public final int typeNpc = 1;
+    public final int typeMonster= 2;
+    public final int typeSword = 3;
+    public final int typeShield= 4;
+    public final int typeAxe= 5;
+    public final int typeConsumable= 6;
 
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -98,6 +108,8 @@ public class Entity {
     public void setAction(){}
 
     public void damageReaction(){}
+
+    public void use(Entity entity){}
 
     public void speak(){
         if(dialogue[dialogueIndex] == null){
@@ -131,7 +143,7 @@ public class Entity {
         gp.check.checkEntity(this, gp.monster);
         boolean contactPlayer = gp.check.checkPlayer(this);
 
-        if(this.type == 2 && contactPlayer){
+        if(this.type == typeMonster && contactPlayer){
             if(!gp.player.invincible){
                 gp.playSE(6);
 
@@ -224,7 +236,7 @@ public class Entity {
             }
 
             //monster HP bar
-            if(type == 2 && hpBarOn) {
+            if(type == typeMonster && hpBarOn) {
                 double oneScale = (double)gp.tile_size /maxLife;
                 double hpBarValue = oneScale * life;
 
