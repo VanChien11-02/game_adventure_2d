@@ -31,6 +31,8 @@ public class Entity {
     public int attackNum = 1;
     boolean attacking = false;
 
+    public int shotAvailableCounter = 0;
+
     //make a hcn around player to collision
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48); //create soild to every entity
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
@@ -59,6 +61,8 @@ public class Entity {
     public int speed;
     public int maxLife;
     public int life;
+    public int maxMana;
+    public int mana;
     public int level;
     public int strength;
     public int dexterity;
@@ -69,11 +73,13 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Projectiles projectiles;
 
     //item attributes
     public int attackValue;
     public int defenseValue;
     public String description = "";
+    public int costUse; //use mana to projectile fireball
 
     //Object
     public BufferedImage image, image2, image3;

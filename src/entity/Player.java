@@ -63,6 +63,7 @@ public class Player extends Entity{
         coin = 0;
         currentWeapon = new obj_sword_normal(gp); // the total attack value is decided by strength and weapon
         currentShield = new obj_shield_wood(gp); // the total defend value is decided by dexterity and shield
+        projectiles = new obj_fireball(gp);
         attack = getAttack();
         defense = getDefense();
     }
@@ -122,7 +123,7 @@ public class Player extends Entity{
             attacking();
         }
         if(KeyH.rightPressed || KeyH.leftPressed ||
-                KeyH.upPressed || KeyH.downPressed || KeyH.enterPressd){ // to stop animation(don't need to much)
+                KeyH.upPressed || KeyH.downPressed || KeyH.enterPressed){ // to stop animation(don't need to much)
             if(KeyH.upPressed){
                 direction = "up";
             } else if (KeyH.downPressed) {
@@ -151,7 +152,7 @@ public class Player extends Entity{
             gp.eHandler.checkEvent();
 
             //if collision == false -> player can move
-            if(!collisionOn && !KeyH.enterPressd){
+            if(!collisionOn && !KeyH.enterPressed){
                 switch (direction){
                     case "up":
                         worldY -= speed;
@@ -168,7 +169,7 @@ public class Player extends Entity{
                 }
             }
 
-            if(KeyH.enterPressd && !attackCanceled){
+            if(KeyH.enterPressed && !attackCanceled){
                 attacking = true;
                 if(currentWeapon.type == typeSword) {
                     gp.playSE(7);
@@ -179,7 +180,7 @@ public class Player extends Entity{
             }
 
             attackCanceled = false;
-            gp.KeyH.enterPressd = false;
+            gp.KeyH.enterPressed = false;
             // Movement...
             movementCounter++;
             if (movementCounter > 12) {
@@ -194,12 +195,27 @@ public class Player extends Entity{
                 standCount = 0;
             }
         }
+
+        if(gp.KeyH.shotKeyPressed && !projectiles.alive && shotAvailableCounter >= 45){
+            //set default coordinates, direction and user
+            projectiles.set(worldX, worldY, direction, true, this);
+
+            //add it into arrayList
+            gp.projectileList.add(projectiles);
+            //add sound (future)
+
+            shotAvailableCounter = 0;
+        }
+
         if(invincible){
             invincibleCounter++;
             if(invincibleCounter > 45){
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if(shotAvailableCounter < 45){
+            shotAvailableCounter++;
         }
     }
 
@@ -235,7 +251,7 @@ public class Player extends Entity{
 
             //check monster collision with the updated worldX, worldY and soildArea
             int monsterIndex = gp.check.checkEntity(this, gp.monster);
-            damageMonster(monsterIndex);
+            damageMonster(monsterIndex, attack);
 
             //reset
             worldX = currentWorldX;
@@ -294,7 +310,7 @@ public class Player extends Entity{
 //    }
 
     public void interactNPC(int index){
-        if(gp.KeyH.enterPressd) {
+        if(gp.KeyH.enterPressed) {
             if (index != 999) {
                 attackCanceled = true;
 //          System.out.println("You are hitting an npc");
@@ -318,7 +334,7 @@ public class Player extends Entity{
         }
     }
 
-    public void damageMonster(int index){
+    public void damageMonster(int index, int attack){
         if(index != 999){
           if(!gp.monster[index].invincible){
               gp.playSE(5);

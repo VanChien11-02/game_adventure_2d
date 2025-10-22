@@ -1,11 +1,10 @@
 package main;
 
-import javax.swing.*;
 import java.awt.event.*;
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
-    public boolean leftPressed, rightPressed, upPressed, downPressed, enterPressd;
+    public boolean leftPressed, rightPressed, upPressed, downPressed, enterPressed, shotKeyPressed;
     boolean showDebugText = false; //to show time and position
 
     public KeyHandler(GamePanel gp){
@@ -85,7 +84,10 @@ public class KeyHandler implements KeyListener {
             gp.gameState = gp.characterState;
         }
         if(code == KeyEvent.VK_ENTER){
-            enterPressd = true;
+            enterPressed = true;
+        }
+        if(code == KeyEvent.VK_R){
+            shotKeyPressed = true;
         }
         //debug
         if (code == KeyEvent.VK_T) {
@@ -163,6 +165,9 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_D){
             rightPressed = false;
+        }
+        if(code == KeyEvent.VK_R){
+            shotKeyPressed = false;
         }
     }
 }

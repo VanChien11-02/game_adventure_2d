@@ -85,7 +85,7 @@ public class EventHandler {
         canTouchEvent = false;
     }
     public void healingPool(int col, int row, int gameState){
-        if(gp.KeyH.enterPressd){
+        if(gp.KeyH.enterPressed){
             gp.gameState = gameState;
             gp.player.attackCanceled = true;
             gp.ui.currentDialogue = "You drink water. \n Your life is recovered.";
