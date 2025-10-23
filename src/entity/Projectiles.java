@@ -26,7 +26,11 @@ public class Projectiles extends Entity{
                 alive = false; // hit -> disappears
             }
         } else{
-            // later
+            boolean contactPlayer = gp.check.checkPlayer(this);
+            if(!gp.player.invincible && contactPlayer){
+                damagePlayer(attack);
+                alive = false;
+            }
         }
 
         switch (direction){
@@ -58,5 +62,13 @@ public class Projectiles extends Entity{
             }
             movementCounter = 0;
         }
+    }
+
+    public boolean haveResource(Entity user){ //check have enough mana, arrow to shoot
+        boolean haveResources = false;
+        return haveResources;
+    }
+
+    public void subtractResource(Entity user){
     }
 }

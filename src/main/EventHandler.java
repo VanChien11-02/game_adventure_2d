@@ -92,6 +92,9 @@ public class EventHandler {
             if(gp.player.life < gp.player.maxLife) {
                 gp.player.life += 1;
             }
+            if(gp.player.mana < gp.player.maxMana) {
+                gp.player.mana += 1;
+            }
 //            gp.aSetter.setMonster(); respawn monster
 //            eventRect[col][row].eventDone = true;
         }

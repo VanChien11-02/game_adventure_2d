@@ -56,6 +56,9 @@ public class Player extends Entity{
         level = 1;
         maxLife = 8;
         life = maxLife;
+        maxMana = 4;
+        mana = maxMana;
+        ammo = 10;
         strength = 1; // more strength -> more damage
         dexterity = 1; // more dexterity -> less damage to player
         exp = 0;
@@ -64,6 +67,7 @@ public class Player extends Entity{
         currentWeapon = new obj_sword_normal(gp); // the total attack value is decided by strength and weapon
         currentShield = new obj_shield_wood(gp); // the total defend value is decided by dexterity and shield
         projectiles = new obj_fireball(gp);
+//        projectiles = new obj_rock(gp);
         attack = getAttack();
         defense = getDefense();
     }
@@ -196,10 +200,13 @@ public class Player extends Entity{
             }
         }
 
-        if(gp.KeyH.shotKeyPressed && !projectiles.alive && shotAvailableCounter >= 45){
+        if(gp.KeyH.shotKeyPressed && !projectiles.alive
+                && shotAvailableCounter >= 45 && projectiles.haveResource(this)){
             //set default coordinates, direction and user
             projectiles.set(worldX, worldY, direction, true, this);
 
+            //subtract the cost(mana,..)
+            projectiles.subtractResource(this);
             //add it into arrayList
             gp.projectileList.add(projectiles);
             //add sound (future)

@@ -63,6 +63,7 @@ public class Entity {
     public int life;
     public int maxMana;
     public int mana;
+    public int ammo; // total rock, arrow can shoot
     public int level;
     public int strength;
     public int dexterity;
@@ -150,16 +151,7 @@ public class Entity {
         boolean contactPlayer = gp.check.checkPlayer(this);
 
         if(this.type == typeMonster && contactPlayer){
-            if(!gp.player.invincible){
-                gp.playSE(6);
-
-                int damage = attack - gp.player.defense;
-                if(damage < 0){
-                    damage = 0;
-                }
-                gp.player.life -= damage;
-                gp.player.invincible = true;
-            }
+            damagePlayer(attack);
         }
         if(!collisionOn){
             switch (direction){
@@ -192,6 +184,22 @@ public class Entity {
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if(shotAvailableCounter < 45){
+            shotAvailableCounter++;
+        }
+    }
+
+    public void damagePlayer(int attack){
+        if(!gp.player.invincible){
+            gp.playSE(6);
+
+            int damage = attack - gp.player.defense;
+            if(damage < 0){
+                damage = 0;
+            }
+            gp.player.life -= damage;
+            gp.player.invincible = true;
         }
     }
 

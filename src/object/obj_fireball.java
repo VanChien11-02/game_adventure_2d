@@ -1,5 +1,6 @@
 package object;
 
+import entity.Entity;
 import entity.Projectiles;
 import main.GamePanel;
 
@@ -28,5 +29,17 @@ public class obj_fireball extends Projectiles {
         left2 = setup("/projectiles/fireball_left_2", gp.tile_size, gp.tile_size);
         right1 = setup("/projectiles/fireball_right_1", gp.tile_size, gp.tile_size);
         right2 = setup("/projectiles/fireball_right_2", gp.tile_size, gp.tile_size);
+    }
+
+    public boolean haveResource(Entity user){ //check have enough mana, arrow to shoot
+        boolean haveResources = false;
+        if(user.mana >= costUse){
+            haveResources = true;
+        }
+        return haveResources;
+    }
+
+    public void subtractResource(Entity user){
+        user.mana -= costUse;
     }
 }
