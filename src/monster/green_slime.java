@@ -2,6 +2,9 @@ package monster;
 
 import main.GamePanel;
 import entity.Entity;
+import object.obj_coin;
+import object.obj_heart;
+import object.obj_mana;
 import object.obj_rock;
 
 import java.util.Random;
@@ -63,14 +66,42 @@ public class green_slime extends Entity {
         }
 
         int i = new Random().nextInt(100)+1;
-        if(i > 99 && !projectiles.alive && shotAvailableCounter >= 45){
+        if(i > 99 && !projectiles.alive && shotAvailableCounter >= 45
+        && checkDistancePlayerToShoot()){
             projectiles.set(worldX, worldY, direction, true, this);
             gp.projectileList.add(projectiles);
             shotAvailableCounter = 0;
         }
     }
+
+    public boolean checkDistancePlayerToShoot(){
+        boolean check = false;
+        int distanceX = Math.abs(worldX - gp.player.worldX);
+        int distanceY = Math.abs(worldY - gp.player.worldY);
+        int distance = Math.max(distanceX, distanceY);
+        if(distance <= gp.tile_size * 5){
+            check = true;
+        }
+        return check;
+    }
+
     public void damageReaction(){
         actionLookCounter = 0;
         direction = gp.player.direction; // to set monster go to far the player
+    }
+
+    public void checkDrop(){
+        int i = new Random().nextInt(100) + 1;
+
+        // set the monster drop
+        if(i < 50){
+            dropItem(new obj_coin(gp));
+        }
+        if(i >= 50 && i < 75){
+            dropItem(new obj_heart(gp));
+        }
+        if(i >= 75){
+            dropItem(new obj_mana(gp));
+        }
     }
 }

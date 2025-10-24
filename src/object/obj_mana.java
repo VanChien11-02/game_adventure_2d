@@ -12,6 +12,7 @@ public class obj_mana extends Entity {
         type = typePickUpOnly;
         name = "Mana Crystal";
         value = 1;
+        down1 = setup("/object/manacrystal_full", gp.tile_size, gp.tile_size);
         image = setup("/object/manacrystal_full", gp.tile_size, gp.tile_size);
         image2 = setup("/object/manacrystal_blank", gp.tile_size, gp.tile_size);
     }

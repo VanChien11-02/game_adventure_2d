@@ -120,6 +120,19 @@ public class Entity {
 
     public void use(Entity entity){}
 
+    public void checkDrop(){}
+
+    public void dropItem(Entity droppedItem){
+        for(int i = 0; i < gp.obj.length; i++){
+            if(gp.obj[i] == null){
+                gp.obj[i] = droppedItem;
+                gp.obj[i].worldX = worldX; // item drop where monster die
+                gp.obj[i].worldY = worldY;
+                break;
+            }
+        }
+    }
+
     public void speak(){
         if(dialogue[dialogueIndex] == null){
             dialogueIndex = 0;
