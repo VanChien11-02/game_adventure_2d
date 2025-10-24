@@ -85,6 +85,7 @@ public class Entity {
     //Object
     public BufferedImage image, image2, image3;
     public boolean collision = false;
+    public int value;
 
     //type entity, weapon, (obj future)
     public int type; // 0 = player, 1 = npc, 2 = monster
@@ -95,6 +96,7 @@ public class Entity {
     public final int typeShield= 4;
     public final int typeAxe= 5;
     public final int typeConsumable= 6;
+    public final int typePickUpOnly = 7;
 
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -274,7 +276,7 @@ public class Entity {
             if(dying){
                 dyingAnimation(g2);
             }
-            g2.drawImage(image, screenX, screenY, gp.tile_size, gp.tile_size, null);
+            g2.drawImage(image, screenX, screenY,null);
             //reset alpha
             changeAlpha(g2, 1f);
         }
