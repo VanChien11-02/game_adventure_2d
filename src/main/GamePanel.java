@@ -47,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[] monster = new Entity[20];
     public InteractiveTIle[] iTile = new InteractiveTIle[30];
     public ArrayList<Entity> projectileList = new ArrayList<>();
+    public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
     //to sort entity if the entity has lower worldY comes in index 0
 
@@ -153,6 +154,16 @@ public class GamePanel extends JPanel implements Runnable{
                     iTile[i].update();
                 }
             }
+            for(int i=0; i<particleList.size(); i++){
+                if(particleList.get(i) != null){
+                    if(particleList.get(i).alive) {
+                        particleList.get(i).update();
+                    }
+                    if(!particleList.get(i).alive){
+                        particleList.remove(i);
+                    }
+                }
+            }
         }
         if(gameState == pauseState){
             // not update
@@ -200,6 +211,12 @@ public class GamePanel extends JPanel implements Runnable{
             for(int i=0; i < projectileList.size(); i++){
                 if(projectileList.get(i) != null){
                     entityList.add(projectileList.get(i));
+                }
+            }
+            //particle
+            for(int i=0; i < particleList.size(); i++){
+                if(particleList.get(i) != null){
+                    entityList.add(particleList.get(i));
                 }
             }
             //entityList.addAll(Arrays.asList(npc));
