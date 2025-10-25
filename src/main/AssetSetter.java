@@ -4,6 +4,7 @@ import entity.NPC_oldMan;
 import monster.green_slime;
 import monster.red_slime;
 import object.*;
+import tile_interactive.it_dryTree;
 
 // thiết lập tài sản (object)
 public class AssetSetter {
@@ -87,5 +88,28 @@ public class AssetSetter {
         gp.monster[3] = new red_slime(gp);
         gp.monster[3].worldX = gp.tile_size * 35;
         gp.monster[3].worldY = gp.tile_size * 10;
+    }
+
+    public void setInteractiveTile(){
+        int i = 0;
+        gp.iTile[i] = new it_dryTree(gp, 27, 12);
+
+        i++;
+        gp.iTile[i] = new it_dryTree(gp, 28, 12);
+
+        i++;
+        gp.iTile[i] = new it_dryTree(gp, 29, 12);
+
+        i++;
+        gp.iTile[i] = new it_dryTree(gp, 30, 12);
+
+        i++;
+        gp.iTile[i] = new it_dryTree(gp, 31, 12);
+
+        i++;
+        gp.iTile[i] = new it_dryTree(gp, 32, 12);
+
+        i++;
+        gp.iTile[i] = new it_dryTree(gp, 33, 12);
     }
 }

@@ -163,6 +163,7 @@ public class Entity {
         gp.check.checkObject(this, false);
         gp.check.checkEntity(this, gp.npc);
         gp.check.checkEntity(this, gp.monster);
+        gp.check.checkEntity(this, gp.iTile);
         boolean contactPlayer = gp.check.checkPlayer(this);
 
         if(this.type == typeMonster && contactPlayer){
@@ -195,7 +196,7 @@ public class Entity {
         }
         if(invincible){
             invincibleCounter++;
-            if(invincibleCounter > 40){
+            if(invincibleCounter > 30){
                 invincible = false;
                 invincibleCounter = 0;
             }

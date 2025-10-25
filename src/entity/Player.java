@@ -149,11 +149,16 @@ public class Player extends Entity{
             // check npc colision
             int checkNPCIndex = gp.check.checkEntity(this, gp.npc);
             interactNPC(checkNPCIndex);
+
             // check monster collision
             int checkMonsterIndex = gp.check.checkEntity(this, gp.monster);
             contactMonster(checkMonsterIndex);
+
             //check event
             gp.eHandler.checkEvent();
+
+            //check interactive tile collision
+            gp.check.checkEntity(this, gp.iTile);
 
             //if collision == false -> player can move
             if(!collisionOn && !KeyH.enterPressed){
@@ -176,7 +181,7 @@ public class Player extends Entity{
             if(KeyH.enterPressed && !attackCanceled){
                 attacking = true;
                 if(currentWeapon.type == typeSword) {
-                    gp.playSE(7);
+//                    gp.playSE(7);
                 } else if (currentWeapon.type == typeAxe) {
                     gp.playSE(9);
                 }
@@ -266,6 +271,9 @@ public class Player extends Entity{
             int monsterIndex = gp.check.checkEntity(this, gp.monster);
             damageMonster(monsterIndex, attack);
 
+            int iTileIndex = gp.check.checkEntity(this, gp.iTile);
+            damageInteractiveTile(iTileIndex);
+
             //reset
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -278,49 +286,19 @@ public class Player extends Entity{
             attacking = false;
         }
     }
-// future need this to pick up something
-//    public void pickUpObject(int index){
-//        if(index != 999) {
 
-////           gp.obj[index] = null;
-//            String objectName = gp.obj[index].name;
-//            switch (objectName){
-//                case "Key":
-////                    gp.stopMusic();
-//                    gp.playSE(1);
-//                    hasKey++;
-//                    gp.obj[index] = null;
-//                    gp.ui.showMessage("You got a key");
-////                    System.out.println("Key: " + hasKey);
-//                    break;
-//                case "Door":
-//                    if(hasKey > 0){
-//                        gp.playSE(4);
-//                        gp.obj[index] = null;
-//                        hasKey--;
-//                        gp.ui.showMessage("You opened the door");
-//
-////                        System.out.println("Key: " + hasKey);
-//                    } else{
-//                        gp.ui.showMessage("You need a key");
-//
-//                    }
-//                    break;
-//                case "Boots":
-//                    gp.playSE(3);
-//                    speed += 2;
-//                    gp.obj[index] = null;
-//                    gp.ui.showMessage("Speed up!");
-//                    break;
-//                case "Chest":
-//                    gp.ui.gameFinished = true;
-//                    gp.stopMusic();
-//                    gp.playSE(2);
-//                    break;
-//            }
-//        }
-//        }
-//    }
+    public void damageInteractiveTile(int index){
+        if(index != 999 && gp.iTile[index].destructible
+        && gp.iTile[index].isCorrectItem(this) && !gp.iTile[index].invincible){
+            gp.iTile[index].playSE();
+            gp.iTile[index].life--;
+            gp.iTile[index].invincible = true;
+
+            if(gp.iTile[index].life == 0) {
+                gp.iTile[index] = gp.iTile[index].getDestroyedForm();
+            }
+        }
+    }
 
     public void interactNPC(int index){
         if(gp.KeyH.enterPressed) {

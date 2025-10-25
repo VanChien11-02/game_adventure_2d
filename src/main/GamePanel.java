@@ -3,6 +3,7 @@ package main;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
+import tile_interactive.InteractiveTIle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[] obj = new Entity[20];//ten object
     public Entity[] npc = new Entity[10];
     public Entity[] monster = new Entity[20];
+    public InteractiveTIle[] iTile = new InteractiveTIle[30];
     public ArrayList<Entity> projectileList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
     //to sort entity if the entity has lower worldY comes in index 0
@@ -74,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
+        aSetter.setInteractiveTile();
         playMusic(0);
         stopMusic();
 //        gameState = playState;
@@ -145,6 +148,11 @@ public class GamePanel extends JPanel implements Runnable{
                     }
                 }
             }
+            for(int i = 0; i < iTile.length; i++){
+                if(iTile[i] != null){
+                    iTile[i].update();
+                }
+            }
         }
         if(gameState == pauseState){
             // not update
@@ -165,8 +173,15 @@ public class GamePanel extends JPanel implements Runnable{
         if(gameState == titleState){
             ui.draw(g2);
         } else {
+            //tile
             tileM.draw(g2);
 
+            // interactive tile
+            for(int i=0; i<iTile.length; i++){
+                if(iTile[i] != null){
+                    iTile[i].draw(g2);
+                }
+            }
             //add entity to the list
             entityList.add(player);
             //npc
