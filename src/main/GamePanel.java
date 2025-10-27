@@ -7,6 +7,7 @@ import tile_interactive.InteractiveTIle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,10 +18,15 @@ public class GamePanel extends JPanel implements Runnable{
     final int scale = 3; //chia màn hình
     public final int tile_size = originalTitleSize * scale; // 48x48
 
-    public final int maxScreenCol = 16;
-    public final int maxScreenRow = 12; //  16 cot x 12 hang
-    public final int ScreenWidth = tile_size * maxScreenCol; //768 pixels
+    public final int maxScreenCol = 20;
+    public final int maxScreenRow = 12; //  16 cot x 12 hang -> 20 cot x 12 hang
+    public final int ScreenWidth = tile_size * maxScreenCol; //960 pixels
     public final int ScreenHeight = tile_size * maxScreenRow; //576 pixels
+    // for full screen
+    int ScreenWidth2 = ScreenWidth;
+    int ScreenHeight2 = ScreenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2;
 
     //setting World
     public final int maxWorldCol = 50; // can change whatever you want to size of world
@@ -82,12 +88,28 @@ public class GamePanel extends JPanel implements Runnable{
         stopMusic();
 //        gameState = playState;
         gameState = titleState;
+
+        tempScreen = new BufferedImage(ScreenWidth, ScreenHeight, BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D)tempScreen.getGraphics(); // everything in g2 will be record in tempScreen(size = full screen)
+
+//        setFullScreen();
     }
+
     public void startGameThread(){
         gameThread = new Thread(this); // this == class
         gameThread.start();
     }
 
+    public void setFullScreen(){
+        //get local screen device
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+
+        //Get full screen width and screen height
+        ScreenWidth2 = Main.window.getWidth();
+        ScreenHeight2 = Main.window.getHeight();
+    }
     // set speed loop to 60 FPS
     public void run(){
         double drawInterval = 1000000000.0/FPS;
@@ -95,7 +117,9 @@ public class GamePanel extends JPanel implements Runnable{
 
         while(gameThread != null){
             update();
-            repaint();
+//            repaint();
+            drawToTempScreen(); // draw everything to the buffered image
+            drawToScreen(); // draw buffered image to screen
             try {
                 double remainingTime = nextDrawTime - System.nanoTime(); //time chờ
                 remainingTime = remainingTime/1000000;
@@ -110,6 +134,7 @@ public class GamePanel extends JPanel implements Runnable{
             }
         }
     }
+
     public void update(){
 //        if(KeyH.upPressed){
 //            playerY -= playerSpeed;
@@ -169,10 +194,8 @@ public class GamePanel extends JPanel implements Runnable{
             // not update
         }
     }
-    public void paintComponent(Graphics g){ //to draw
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g; // g -> g2D
 
+    public void drawToTempScreen(){
         //DEBUG
         long drawStart = 0;
         if(KeyH.showDebugText) {
@@ -188,40 +211,40 @@ public class GamePanel extends JPanel implements Runnable{
             tileM.draw(g2);
 
             // interactive tile
-            for(int i=0; i<iTile.length; i++){
-                if(iTile[i] != null){
+            for (int i = 0; i < iTile.length; i++) {
+                if (iTile[i] != null) {
                     iTile[i].draw(g2);
                 }
             }
             //add entity to the list
             entityList.add(player);
             //npc
-            for(int i=0; i < npc.length; i++){
-                if(npc[i] != null){
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
                     entityList.add(npc[i]);
                 }
             }
             //monster
-            for(int i=0; i < monster.length; i++){
-                if(monster[i] != null){
+            for (int i = 0; i < monster.length; i++) {
+                if (monster[i] != null) {
                     entityList.add(monster[i]);
                 }
             }
             //projectile
-            for(int i=0; i < projectileList.size(); i++){
-                if(projectileList.get(i) != null){
+            for (int i = 0; i < projectileList.size(); i++) {
+                if (projectileList.get(i) != null) {
                     entityList.add(projectileList.get(i));
                 }
             }
             //particle
-            for(int i=0; i < particleList.size(); i++){
-                if(particleList.get(i) != null){
+            for (int i = 0; i < particleList.size(); i++) {
+                if (particleList.get(i) != null) {
                     entityList.add(particleList.get(i));
                 }
             }
             //entityList.addAll(Arrays.asList(npc));
-            for(int i=0; i<obj.length; i++){
-                if(obj[i] != null){
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
                     entityList.add(obj[i]);
                 }
             }
@@ -235,48 +258,56 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             });
             // draw entities
-            for(int i=0; i<entityList.size(); i++){
+            for (int i = 0; i < entityList.size(); i++) {
                 entityList.get(i).draw(g2);
             }
             //empty list
             entityList.clear();
             // UI
             ui.draw(g2);
-            //DEBUG
-            if (KeyH.showDebugText) {
-                long drawEnd = System.nanoTime();
-                long passed = drawEnd - drawStart;
-
-                g2.setFont(new Font("Arial", Font.PLAIN, 20));
-                g2.setColor(Color.white);
-
-                int x = 10;
-                int y = 400;
-                int lineHeight = 20;
-                //display player position
-                g2.drawString("World X " + player.worldX, x, y);
-                y+=lineHeight;
-                g2.drawString("World Y " + player.worldY, x, y);
-                y+=lineHeight;
-                g2.drawString("col " + (player.worldX + player.solidArea.x)/ tile_size, x, y);
-                y+=lineHeight;
-                g2.drawString("row " + (player.worldY + player.solidArea.y)/ tile_size, x, y);
-                y+=lineHeight;
-
-                g2.drawString("Time: " + passed, x, y);
-//                System.out.println("Draw time: " + passed);
-                g2.dispose(); //bỏ qua graphics
-            }
         }
+
+        //DEBUG
+        if (KeyH.showDebugText) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+
+            g2.setFont(new Font("Arial", Font.PLAIN, 20));
+            g2.setColor(Color.white);
+
+            int x = 10;
+            int y = 400;
+            int lineHeight = 20;
+            //display player position
+            g2.drawString("World X " + player.worldX, x, y);
+            y+=lineHeight;
+            g2.drawString("World Y " + player.worldY, x, y);
+            y+=lineHeight;
+            g2.drawString("col " + (player.worldX + player.solidArea.x)/ tile_size, x, y);
+            y+=lineHeight;
+            g2.drawString("row " + (player.worldY + player.solidArea.y)/ tile_size, x, y);
+            y+=lineHeight;
+
+            g2.drawString("Time: " + passed, x, y);
+//          System.out.println("Draw time: " + passed);
+        }
+    }
+
+    public void drawToScreen(){
+        Graphics g = getGraphics();
+        g.drawImage(tempScreen, 0, 0, ScreenWidth2, ScreenHeight2, null);
+        g.dispose(); //bỏ qua graphics
     }
     public void playMusic(int i){
         music.setFile(i);
         music.play();
         music.loop();
     }
+
     public void stopMusic(){
         music.stop();
     }
+
     // some sound don't need to loop
     public void playSE(int i){
         se.setFile(i);

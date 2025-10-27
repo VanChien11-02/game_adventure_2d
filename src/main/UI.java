@@ -247,7 +247,7 @@ public class UI {
 
     public void drawCharacterScreen(){
         //create a frame
-        final int frameX = gp.tile_size;
+        final int frameX = gp.tile_size * 2;
         final int frameY = gp.tile_size;
         final int frameWidth = gp.tile_size * 5;
         final int frameHeight = gp.tile_size * 10;
@@ -349,7 +349,7 @@ public class UI {
 
     public void drawInventory(){ // like bag in Minecraft
         // Create new frame in character screen
-        int frameX = gp.tile_size * 9;
+        int frameX = gp.tile_size * 12;
         int frameY = gp.tile_size;
         int frameWidth = gp.tile_size * 6;
         int frameHeight = gp.tile_size * 5;
