@@ -27,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
     int ScreenHeight2 = ScreenHeight;
     BufferedImage tempScreen;
     Graphics2D g2;
+    public boolean fullScreenOn = false;
 
     //setting World
     public final int maxWorldCol = 50; // can change whatever you want to size of world
@@ -64,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int pauseState = 2;
     public final int dialogueState = 3;
     public final int characterState = 4;
+    public final int optionState = 5;
 
     //set player's Default position (test before create class player)
 //    int playerX = 100;
@@ -85,7 +87,7 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setMonster();
         aSetter.setInteractiveTile();
         playMusic(0);
-        stopMusic();
+//        stopMusic();
 //        gameState = playState;
         gameState = titleState;
 
