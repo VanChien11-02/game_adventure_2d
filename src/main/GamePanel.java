@@ -67,6 +67,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int dialogueState = 3;
     public final int characterState = 4;
     public final int optionState = 5;
+    public final int gameOverState = 6;
 
     //set player's Default position (test before create class player)
 //    int playerX = 100;
@@ -103,6 +104,25 @@ public class GamePanel extends JPanel implements Runnable{
     public void startGameThread(){
         gameThread = new Thread(this); // this == class
         gameThread.start();
+    }
+
+    public void retry(){
+        player.setDefaultPositions();
+        player.restoreLifeAndMana();
+        aSetter.setNPC();
+        aSetter.setMonster();
+    }
+
+    public void restart(){
+        player.setDefaultValues();
+        player.setItem();
+        ui.slotCol = 0;
+        ui.slotRow = 0;
+        player.selectItem();
+        aSetter.setObject();
+        aSetter.setNPC();
+        aSetter.setMonster();
+        aSetter.setInteractiveTile();
     }
 
     public void setFullScreen(){
