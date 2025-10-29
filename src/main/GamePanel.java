@@ -45,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable{
     public AssetSetter aSetter = new AssetSetter(this);
     public EventHandler eHandler = new EventHandler(this);
     public UI ui = new UI(this);
+    Config config = new Config(this);
     Thread gameThread; // to set FPS
 
     //entity and object
@@ -94,7 +95,9 @@ public class GamePanel extends JPanel implements Runnable{
         tempScreen = new BufferedImage(ScreenWidth, ScreenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics(); // everything in g2 will be record in tempScreen(size = full screen)
 
-//        setFullScreen();
+        if(fullScreenOn) {
+            setFullScreen();
+        }
     }
 
     public void startGameThread(){
