@@ -35,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable{
 //    public final int worldWidth = maxWorldCol * title_size;
 //    public final int worldHeight = maxWorldRow * title_size;
     int FPS = 60;
+    int currentFPS = 0;
 
     //system
     TileManager tileM = new TileManager(this);
@@ -136,29 +137,43 @@ public class GamePanel extends JPanel implements Runnable{
         ScreenHeight2 = Main.window.getHeight();
     }
     // set speed loop to 60 FPS
-    public void run(){
-        double drawInterval = 1000000000.0/FPS;
-        double nextDrawTime = System.nanoTime() + drawInterval; //thời gian giữa hai khung hình mong muốn
+public void run() {
+    long lastTime = System.nanoTime();
+    double delta = 0;
+    double updateInterval = 1.0 / FPS; // time for 1 frame
+    int frameCount = 0;
+    long timer = System.currentTimeMillis();
 
-        while(gameThread != null){
+    while (gameThread != null) {
+        long currentTime = System.nanoTime();
+        delta += (currentTime - lastTime) / 1000000000.0;
+        lastTime = currentTime;
+
+        // update logic khi đủ thời gian 1 frame
+        while (delta >= updateInterval) {
             update();
-//            repaint();
-            drawToTempScreen(); // draw everything to the buffered image
-            drawToScreen(); // draw buffered image to screen
-            try {
-                double remainingTime = nextDrawTime - System.nanoTime(); //time chờ
-                remainingTime = remainingTime/1000000;
+            delta -= updateInterval;
+        }
 
-                if(remainingTime < 0){
-                    remainingTime = 0;
-                }
-                Thread.sleep((long) (remainingTime));
-                nextDrawTime += drawInterval;
-            } catch (InterruptedException e){
-                e.printStackTrace();
-            }
+        drawToTempScreen();        // draw everything to the buffered image
+        drawToScreen(); // draw buffered image to screen
+        frameCount++;
+
+        // tính FPS mỗi giây
+        if (System.currentTimeMillis() - timer >= 1000) {
+            currentFPS = frameCount;
+            frameCount = 0;
+            timer += 1000;
+        }
+
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
+}
+
 
     public void update(){
 //        if(KeyH.upPressed){
@@ -315,6 +330,8 @@ public class GamePanel extends JPanel implements Runnable{
 
             g2.drawString("Time: " + passed, x, y);
 //          System.out.println("Draw time: " + passed);
+            y+=lineHeight;
+            g2.drawString("FPS: " + currentFPS, x, y);
         }
     }
 
