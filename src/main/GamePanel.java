@@ -8,6 +8,7 @@ import tile_interactive.InteractiveTIle;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -232,6 +233,9 @@ public void run() {
         }
         if(gameState == pauseState){
             // not update
+        }
+        if(gameState == gameOverState){
+            ui.timeUpdate();
         }
     }
 

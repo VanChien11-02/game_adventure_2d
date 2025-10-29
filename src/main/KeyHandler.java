@@ -1,7 +1,6 @@
 package main;
 
 import java.awt.event.*;
-import java.security.Key;
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
@@ -37,7 +36,7 @@ public class KeyHandler implements KeyListener {
         }
         //TITLE STATE
         else if (gp.gameState == gp.titleState) {
-            titleStata(code);
+            titleState(code);
         }
         //OPTION STATE (MENU)
         else if (gp.gameState == gp.optionState) {
@@ -49,7 +48,7 @@ public class KeyHandler implements KeyListener {
         }
     }
 
-    public void titleStata(int code){
+    public void titleState(int code){
         if (code == KeyEvent.VK_S) {
             gp.ui.commandNum++;
             if(gp.ui.commandNum > 2){
@@ -225,12 +224,12 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_W){
             gp.ui.commandNum--;
             if(gp.ui.commandNum < 0){
-                gp.ui.commandNum = 1;
+                gp.ui.commandNum = 2;
             }
         }
         if(code == KeyEvent.VK_S){
             gp.ui.commandNum++;
-            if(gp.ui.commandNum > 1){
+            if(gp.ui.commandNum > 2){
                 gp.ui.commandNum = 0;
             }
         }

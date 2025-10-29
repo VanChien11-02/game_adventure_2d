@@ -32,6 +32,9 @@ public class UI {
 
     int subState = 0;
 
+    int timeCounter = 0;
+    int time = 5;
+
 //    double playTime;
 //    DecimalFormat dFormat = new DecimalFormat("#0.00"); // định dạng time(lam tròn đến chư sô thập phân thứ 2
     public Graphics2D g2;
@@ -663,6 +666,26 @@ public class UI {
         g2.drawString(text, x, y);
     }
 
+    public void timeUpdate(){
+        //Time to respawn
+        timeCounter++;
+        if (timeCounter >= 60) {
+            timeCounter = 0;
+            time--;
+        }
+        g2.setColor(Color.yellow);
+        g2.setFont(g2.getFont().deriveFont(60f));
+        String text = time + " second to respawn";
+        int x = getXforCenteredText(text);
+        int y = gp.tile_size * 6;
+        g2.drawString(text, x, y);
+        if(time == 0){
+            gp.gameState = gp.playState;
+            gp.retry();
+            time = 5;
+        }
+    }
+
     public void drawGameOverScreen(){
         g2.setColor(new Color(0, 0, 0, 150));
         g2.fillRect(0, 0, gp.ScreenWidth, gp.ScreenHeight);
@@ -682,6 +705,9 @@ public class UI {
         g2.setColor(Color.white);
         g2.drawString(text, x-4, y-4);
 
+        //time to respawn
+        timeUpdate();
+
         //Retry
         g2.setFont(g2.getFont().deriveFont(50f));
         text = "Retry";
@@ -697,12 +723,26 @@ public class UI {
             }
         }
 
+        //menu screen
+        text = "Menu";
+        x = getXforCenteredText(text);
+        y += 55;
+        g2.drawString(text, x, y);
+        if(commandNum == 1){
+            g2.drawString(">", x-35, y);
+            if(gp.KeyH.enterPressed){
+                gp.gameState = gp.titleState;
+                gp.restart();
+                gp.playMusic(0);
+            }
+        }
+
         //quit
         text = "Quit";
         x = getXforCenteredText(text);
         y += 55;
         g2.drawString(text, x, y);
-        if(commandNum == 1){
+        if(commandNum == 2){
             g2.drawString(">", x-35, y);
             if(gp.KeyH.enterPressed){
                 System.exit(0);
