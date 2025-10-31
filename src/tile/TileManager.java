@@ -13,13 +13,15 @@ import java.io.InputStreamReader;
 public class TileManager {
     GamePanel gp;
     public Tile[] tile;
-    public int[][] mapIileNum;
+    //array 3D, first is save map number, 2 remaining save mapTileNum
+    public int[][][] mapIileNum;
     public TileManager(GamePanel gp){
         this.gp = gp;
         tile = new Tile[50]; // create 10 tile, vd: wall, tree, water
-        mapIileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
+        mapIileNum = new int[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
-        loadMap("/maps/worldV2.txt"); //if we use another map
+        loadMap("/maps/worldV3.txt", 0); //if we use another map
+        loadMap("/maps/interior01.txt", 1);
     }
     public void getTileImage(){
         //0. grass
@@ -51,6 +53,10 @@ public class TileManager {
         setup(39, "earth", false);
         setup(40, "wall", true);
         setup(41,"tree", true);
+        setup(42,"hut", false);
+        setup(43,"floor01", false);
+        setup(44,"table01", true);
+
     }
     public void setup(int index, String imageName, boolean collision){
         UtilityTool uTool = new UtilityTool();
@@ -63,7 +69,7 @@ public class TileManager {
             e.printStackTrace();
         }
     }
-    public void loadMap(String filepath){
+    public void loadMap(String filepath, int map){
         try{
             InputStream ins = getClass().getResourceAsStream(filepath);
             BufferedReader br = new BufferedReader(new InputStreamReader(ins));
@@ -74,7 +80,7 @@ public class TileManager {
                 for (int col = 0; col < gp.maxWorldCol; col++){
                     String[] numbers = line.split(" ");
                     int num = Integer.parseInt(numbers[col]);
-                    mapIileNum[col][row] = num;
+                    mapIileNum[map][col][row] = num;
                 }
             }
             br.close();
@@ -91,7 +97,7 @@ public class TileManager {
         int row = 0; //world col and row
 
         while(col < gp.maxWorldCol && row < gp.maxWorldRow){
-            int nums = mapIileNum[col][row];
+            int nums = mapIileNum[gp.currentMap][col][row];
             // worldX, world is distance to mapTileNum[0][0]
             int worldX = col * gp.tile_size;
             int worldY = row * gp.tile_size;

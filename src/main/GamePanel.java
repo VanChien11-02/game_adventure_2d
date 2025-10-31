@@ -8,7 +8,6 @@ import tile_interactive.InteractiveTIle;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,6 +32,8 @@ public class GamePanel extends JPanel implements Runnable{
     //setting World
     public final int maxWorldCol = 50; // can change whatever you want to size of world
     public final int maxWorldRow = 50;
+    public final int maxMap = 10;
+    public int currentMap = 0;
 //    public final int worldWidth = maxWorldCol * title_size;
 //    public final int worldHeight = maxWorldRow * title_size;
     int FPS = 60;
@@ -52,10 +53,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     //entity and object
     public Player player = new Player(this, KeyH);
-    public Entity[] obj = new Entity[20];//ten object
-    public Entity[] npc = new Entity[10];
-    public Entity[] monster = new Entity[20];
-    public InteractiveTIle[] iTile = new InteractiveTIle[30];
+    public Entity[][] obj = new Entity[maxMap][20];//ten object
+    public Entity[][] npc = new Entity[maxMap][10];
+    public Entity[][] monster = new Entity[maxMap][20];
+    public InteractiveTIle[][] iTile = new InteractiveTIle[maxMap][30];
     public ArrayList<Entity> projectileList = new ArrayList<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
@@ -128,52 +129,53 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setFullScreen(){
-        //get local screen device
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        gd.setFullScreenWindow(Main.window);
-
-        //Get full screen width and screen height
-        ScreenWidth2 = Main.window.getWidth();
-        ScreenHeight2 = Main.window.getHeight();
+//        //get local screen device
+//        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//        GraphicsDevice gd = ge.getDefaultScreenDevice();
+//        gd.setFullScreenWindow(Main.window);
+//
+//        //Get full screen width and screen height
+//        ScreenWidth2 = Main.window.getWidth();
+//        ScreenHeight2 = Main.window.getHeight();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        Main.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        ScreenWidth2 = (int) width;
+        ScreenHeight2 = (int) height;
+        //offset factor to be used by mouse listener or mouse motion listener if you are using cursor in your game. Multiply your e.getX()e.getY() by this.
+//        fullScreenOffsetFactor = (float) ScreenWidth / (float) ScreenWidth2;
     }
+
     // set speed loop to 60 FPS
-public void run() {
-    long lastTime = System.nanoTime();
-    double delta = 0;
-    double updateInterval = 1.0 / FPS; // time for 1 frame
-    int frameCount = 0;
-    long timer = System.currentTimeMillis();
+    public void run(){
+        double drawInterval = (double) 1000000000 /FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+        long timer = 0;
+        int drawCount = 0;
 
-    while (gameThread != null) {
-        long currentTime = System.nanoTime();
-        delta += (currentTime - lastTime) / 1000000000.0;
-        lastTime = currentTime;
+        while(gameThread != null){
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval;
+            timer += (currentTime - lastTime);
+            lastTime = currentTime;
 
-        // update logic khi đủ thời gian 1 frame
-        while (delta >= updateInterval) {
-            update();
-            delta -= updateInterval;
-        }
-
-        drawToTempScreen();        // draw everything to the buffered image
-        drawToScreen(); // draw buffered image to screen
-        frameCount++;
-
-        // tính FPS mỗi giây
-        if (System.currentTimeMillis() - timer >= 1000) {
-            currentFPS = frameCount;
-            frameCount = 0;
-            timer += 1000;
-        }
-
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            if(delta >= 1){
+                update();
+                drawToTempScreen();
+                drawToScreen();
+                delta--;
+                drawCount++;
+            }
+            if(timer >= 1000000000) {
+                currentFPS = drawCount;
+                drawCount = 0;
+                timer = 0;
+            }
         }
     }
-}
 
 
     public void update(){
@@ -189,19 +191,19 @@ public void run() {
         if(gameState == playState) {
             player.update();
             //npc
-            for(int i=0; i<npc.length; i++){
-                if(npc[i] != null){
-                    npc[i].update();
+            for(int i=0; i<npc[1].length; i++){ //access to length on second like 20, not maxMap(10)
+                if(npc[currentMap][i] != null){
+                    npc[currentMap][i].update();
                 }
             }
-            for(int i=0; i<monster.length; i++){
-                if(monster[i] != null){
-                    if(monster[i].alive && !monster[i].dying) {
-                        monster[i].update();
+            for(int i=0; i<monster[1].length; i++){
+                if(monster[currentMap][i] != null){
+                    if(monster[currentMap][i].alive && !monster[currentMap][i].dying) {
+                        monster[currentMap][i].update();
                     }
-                    if(!monster[i].alive){
-                        monster[i].checkDrop();
-                        monster[i] = null;
+                    if(!monster[currentMap][i].alive){
+                        monster[currentMap][i].checkDrop();
+                        monster[currentMap][i] = null;
                     }
                 }
             }
@@ -215,9 +217,9 @@ public void run() {
                     }
                 }
             }
-            for(int i = 0; i < iTile.length; i++){
-                if(iTile[i] != null){
-                    iTile[i].update();
+            for(int i = 0; i < iTile[1].length; i++){
+                if(iTile[currentMap][i] != null){
+                    iTile[currentMap][i].update();
                 }
             }
             for(int i=0; i<particleList.size(); i++){
@@ -233,9 +235,6 @@ public void run() {
         }
         if(gameState == pauseState){
             // not update
-        }
-        if(gameState == gameOverState){
-            ui.timeUpdate();
         }
     }
 
@@ -255,23 +254,23 @@ public void run() {
             tileM.draw(g2);
 
             // interactive tile
-            for (int i = 0; i < iTile.length; i++) {
-                if (iTile[i] != null) {
-                    iTile[i].draw(g2);
+            for (int i = 0; i < iTile[1].length; i++) {
+                if (iTile[currentMap][i] != null) {
+                    iTile[currentMap][i].draw(g2);
                 }
             }
             //add entity to the list
             entityList.add(player);
             //npc
-            for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    entityList.add(npc[i]);
+            for (int i = 0; i < npc[1].length; i++) {
+                if (npc[currentMap][i] != null) {
+                    entityList.add(npc[currentMap][i]);
                 }
             }
             //monster
-            for (int i = 0; i < monster.length; i++) {
-                if (monster[i] != null) {
-                    entityList.add(monster[i]);
+            for (int i = 0; i < monster[1].length; i++) {
+                if (monster[currentMap][i] != null) {
+                    entityList.add(monster[currentMap][i]);
                 }
             }
             //projectile
@@ -287,9 +286,9 @@ public void run() {
                 }
             }
             //entityList.addAll(Arrays.asList(npc));
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    entityList.add(obj[i]);
+            for (int i = 0; i < obj[1].length; i++) {
+                if (obj[currentMap][i] != null) {
+                    entityList.add(obj[currentMap][i]);
                 }
             }
             //Sort

@@ -666,26 +666,6 @@ public class UI {
         g2.drawString(text, x, y);
     }
 
-    public void timeUpdate(){
-        //Time to respawn
-        timeCounter++;
-        if (timeCounter >= 60) {
-            timeCounter = 0;
-            time--;
-        }
-        g2.setColor(Color.yellow);
-        g2.setFont(g2.getFont().deriveFont(60f));
-        String text = time + " second to respawn";
-        int x = getXforCenteredText(text);
-        int y = gp.tile_size * 6;
-        g2.drawString(text, x, y);
-        if(time == 0){
-            gp.gameState = gp.playState;
-            gp.retry();
-            time = 5;
-        }
-    }
-
     public void drawGameOverScreen(){
         g2.setColor(new Color(0, 0, 0, 150));
         g2.fillRect(0, 0, gp.ScreenWidth, gp.ScreenHeight);
@@ -705,14 +685,30 @@ public class UI {
         g2.setColor(Color.white);
         g2.drawString(text, x-4, y-4);
 
-        //time to respawn
-        timeUpdate();
+        //Time to respawn
+        timeCounter++;
+        if (timeCounter >= 60) {
+            timeCounter = 0;
+            time--;
+        }
+        g2.setColor(Color.yellow);
+        g2.setFont(g2.getFont().deriveFont(60f));
+        text = time + " second to respawn";
+        x = getXforCenteredText(text);
+        y += gp.tile_size * 2;
+        g2.drawString(text, x, y);
+        if(time == 0){
+            gp.gameState = gp.playState;
+            gp.retry();
+            gp.playMusic(0);
+            time = 5;
+        }
 
         //Retry
         g2.setFont(g2.getFont().deriveFont(50f));
         text = "Retry";
         x = getXforCenteredText(text);
-        y += gp.tile_size * 4;
+        y += gp.tile_size * 2;
         g2.drawString(text, x, y);
         if(commandNum == 0){
             g2.drawString(">", x-35, y);
