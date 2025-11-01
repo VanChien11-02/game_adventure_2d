@@ -16,7 +16,7 @@ public class UI {
     Font MaruMonica, PurisaBold;
 //    BufferedImage KeyImage;
     BufferedImage heart_full, heart_half, heart_blank, mana_full, mana_blank;
-    public boolean messageOn = false;
+//    public boolean messageOn = false;
 //    public String message = "";
 //    int messageCounter = 0;
 //    public boolean gameFinished = false;
@@ -32,8 +32,7 @@ public class UI {
 
     int subState = 0;
 
-    int timeCounter = 0;
-    int time = 5;
+    public int timeToRespawn = 5;
 
 //    double playTime;
 //    DecimalFormat dFormat = new DecimalFormat("#0.00"); // định dạng time(lam tròn đến chư sô thập phân thứ 2
@@ -673,35 +672,31 @@ public class UI {
         int x;
         int y;
         String text;
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 110f));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 70f));
 
-        text = "Game Over";
+//        text = "Game Over";
+        text = "you were slain";
         //Shadow text
         g2.setColor(Color.black);
         x = getXforCenteredText(text);
         y = gp.tile_size * 4;
         g2.drawString(text, x, y);
         //Main
-        g2.setColor(Color.white);
+        g2.setColor(new Color(157, 24, 24));
         g2.drawString(text, x-4, y-4);
 
         //Time to respawn
-        timeCounter++;
-        if (timeCounter >= 60) {
-            timeCounter = 0;
-            time--;
-        }
         g2.setColor(Color.yellow);
         g2.setFont(g2.getFont().deriveFont(60f));
-        text = time + " second to respawn";
+        text = String.valueOf(timeToRespawn);
         x = getXforCenteredText(text);
         y += gp.tile_size * 2;
         g2.drawString(text, x, y);
-        if(time == 0){
+        if(timeToRespawn <= 0){
             gp.gameState = gp.playState;
             gp.retry();
             gp.playMusic(0);
-            time = 5;
+            timeToRespawn = 5;
         }
 
         //Retry
