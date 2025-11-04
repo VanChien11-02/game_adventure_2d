@@ -1,10 +1,13 @@
 package main;
 
+import entity.Entity;
+
 public class EventHandler {
     GamePanel gp;
     // when player touch, event just happen 1 time, but if player go outside the rect, this can happen again
     int previousEventX, previousEventY;
     boolean canTouchEvent = true;
+    public int tempMap, tempCol, tempRow;
 
     EventRect[][][] eventRect;
     public EventHandler(GamePanel gp){
@@ -58,6 +61,9 @@ public class EventHandler {
             }
             else if (hit(1, 12, 13, "any")) {
                 newWorld(0, 10, 39);
+            }
+            else if (hit(1, 12, 9 , "any")){
+                speak(gp.npc[1][0]);
             }
         }
     }
@@ -119,12 +125,24 @@ public class EventHandler {
         gp.player.worldY = gp.tile_size * 10;
     }
     public void newWorld(int map, int col, int row){
-        gp.currentMap = map;
-        gp.player.worldX = gp.tile_size * col;
-        gp.player.worldY = gp.tile_size * row;
-        previousEventX = gp.player.worldX;
-        previousEventY = gp.player.worldY;
+        gp.gameState = gp.transitionState;
+        tempMap = map;
+        tempCol = col;
+        tempRow = row;
+
+//        gp.currentMap = map;
+//        gp.player.worldX = gp.tile_size * col;
+//        gp.player.worldY = gp.tile_size * row;
+//        previousEventX = gp.player.worldX;
+//        previousEventY = gp.player.worldY;
         canTouchEvent = false;
         //gp.playSE()
+    }
+    public void speak(Entity entity){
+        if(gp.KeyH.enterPressed){
+            gp.gameState = gp.dialogueState;
+            gp.player.attackCanceled = true;
+            entity.speak();
+        }
     }
 }

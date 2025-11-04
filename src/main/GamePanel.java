@@ -71,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int characterState = 4;
     public final int optionState = 5;
     public final int gameOverState = 6;
+    public final int transitionState = 7;
+    public final int tradeState = 8;
 
     //set player's Default position (test before create class player)
 //    int playerX = 100;
@@ -119,8 +121,8 @@ public class GamePanel extends JPanel implements Runnable{
     public void restart(){
         player.setDefaultValues();
         player.setItem();
-        ui.slotCol = 0;
-        ui.slotRow = 0;
+        ui.playerSlotCol = 0;
+        ui.playerSlotRow = 0;
         player.selectItem();
         aSetter.setObject();
         aSetter.setNPC();
@@ -357,6 +359,7 @@ public class GamePanel extends JPanel implements Runnable{
         g.drawImage(tempScreen, 0, 0, ScreenWidth2, ScreenHeight2, null);
         g.dispose(); //bỏ qua graphics
     }
+
     public void playMusic(int i){
         music.setFile(i);
         music.play();

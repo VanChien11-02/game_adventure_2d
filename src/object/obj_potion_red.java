@@ -14,6 +14,7 @@ public class obj_potion_red extends Entity {
         value = 5;
         down1 = setup("/object/potion_red", gp.tile_size, gp.tile_size);
         description = "[Red potion]\n heal your life by " + value + " hp!";
+        price = 75;
     }
     public void use(Entity entity){
         gp.gameState = gp.dialogueState;

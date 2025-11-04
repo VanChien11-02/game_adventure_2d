@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 // npc, player, monster, boss
 public class Entity {
@@ -56,6 +57,10 @@ public class Entity {
     String[] dialogue = new String[20];
     int dialogueIndex = 0;
 
+    //inventory
+    public ArrayList<Entity> inventory= new ArrayList<>();
+    public final int maxInventorySize = 20;
+
     //Character attributes
     public String name;
     public int speed;
@@ -81,6 +86,7 @@ public class Entity {
     public int defenseValue;
     public String description = "";
     public int costUse; //use mana to projectile fireball
+    public int price;
 
     //Object
     public BufferedImage image, image2, image3;

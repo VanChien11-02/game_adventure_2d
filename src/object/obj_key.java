@@ -10,5 +10,6 @@ public class obj_key extends Entity {
         down1 = setup("/object/key", gp.tile_size, gp.tile_size);
         //solidArea.x = 0; create soildArea to each object
         description = "[" + name + "] \n it can open \n something special.";
+        price = 100;
     }
 }

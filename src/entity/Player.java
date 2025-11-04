@@ -16,8 +16,6 @@ public class Player extends Entity{
     public final int screenY;
     int standCount = 0; // count stand player
     public boolean attackCanceled = false;
-    public ArrayList<Entity> inventory= new ArrayList<>();
-    public final int maxInventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler KeyH){
         super(gp); //call super class play and insert gp -> class entity can work
@@ -47,10 +45,11 @@ public class Player extends Entity{
     public void setDefaultValues(){
 //        x = 100;
 //        y = 100;
-        worldX = gp.tile_size * 23; // starting location of player
-        worldY = gp.tile_size * 21;
-//        worldX = gp.tile_size * 12; // starting location of player
-//        worldY = gp.tile_size * 13;
+//        worldX = gp.tile_size * 23; // starting location of player
+//        worldY = gp.tile_size * 21;
+        worldX = gp.tile_size * 12; // starting location of player
+        worldY = gp.tile_size * 12;
+        gp.currentMap = 1;
 
         speed = 4;
         direction = "down";
@@ -66,7 +65,7 @@ public class Player extends Entity{
         dexterity = 1; // more dexterity -> less damage to player
         exp = 0;
         nextLevelExp = 5;
-        coin = 0;
+        coin = 500;
         currentWeapon = new obj_sword_normal(gp); // the total attack value is decided by strength and weapon
         currentShield = new obj_shield_wood(gp); // the total defend value is decided by dexterity and shield
         projectiles = new obj_fireball(gp);
@@ -402,7 +401,7 @@ public class Player extends Entity{
     }
 
     public void selectItem(){
-        int itemIndex =gp.ui.getItemIndexOnSlot();
+        int itemIndex =gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
         if(itemIndex < inventory.size()){
             Entity selectedItem = inventory.get(itemIndex);
             if(selectedItem.type == typeSword || selectedItem.type == typeAxe){
