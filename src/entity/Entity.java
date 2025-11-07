@@ -48,6 +48,7 @@ public class Entity {
     public boolean dying = false;
     int dyingCounter = 0;
     int hpBarCounter = 0;
+    public boolean onPath = false;
 
     // to make player just take one damage in one time
     public boolean invincible = false;
@@ -197,8 +198,7 @@ public class Entity {
         }
     }
 
-    public void update(){
-        setAction();
+    public void checkCollision(){
         collisionOn = false;
         //check collision between entity
         gp.check.checkTile(this);
@@ -211,6 +211,12 @@ public class Entity {
         if(this.type == typeMonster && contactPlayer){
             damagePlayer(attack);
         }
+    }
+
+    public void update(){
+        setAction();
+        checkCollision();
+
         if(!collisionOn){
             switch (direction){
                 case "up":
@@ -258,6 +264,78 @@ public class Entity {
             }
             gp.player.life -= damage;
             gp.player.invincible = true;
+        }
+    }
+
+    public void searchPath(int goalCol, int goalRow){
+        int startCol = (worldX + solidArea.x) / gp.tile_size;
+        int startRow = (worldY + solidArea.y) / gp.tile_size;
+
+        gp.pFinder.setNode(startCol, startRow, goalCol, goalRow);
+        if(gp.pFinder.search()){
+            //next worldX & worldY
+            int nextX = gp.pFinder.pathList.get(0).col * gp.tile_size;
+            int nextY = gp.pFinder.pathList.get(0).row * gp.tile_size;
+
+            //Entity's solidArea position(open node)
+            int enLeftX = worldX + solidArea.x;
+            int enRightX = worldX + solidArea.x + solidArea.width;
+            int enTopY = worldY + solidArea.y;
+            int enBottomY = worldY + solidArea.y + solidArea.height;
+            //use this number to cmp with nextX, nextY -> Entity's direction
+            if(enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.tile_size){
+                direction = "up";
+            }
+            else if(enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.tile_size){
+                direction = "down";
+            }
+            else if(enTopY >= nextY && enBottomY < nextY + gp.tile_size){
+                //left or right
+                if(enLeftX > nextX){
+                    direction = "left";
+                }
+                if(enLeftX < nextX){
+                    direction = "right";
+                }
+            }
+            else if (enTopY > nextY && enLeftX > nextX) {
+                //up or left
+                direction = "up";
+                checkCollision();
+                if(collisionOn){
+                    direction = "left";
+                }
+            }
+            else if (enTopY > nextY && enLeftX < nextX){
+                //up or right
+                direction = "up";
+                checkCollision();
+                if(collisionOn){
+                    direction = "right";
+                }
+            }
+            else if (enTopY < nextY && enLeftX > nextX) {
+                //down or left
+                direction = "down";
+                checkCollision();
+                if(collisionOn){
+                    direction = "left";
+                }
+            }
+            else if (enTopY < nextY && enLeftX < nextX){
+                //down or right
+                direction = "down";
+                checkCollision();
+                if(collisionOn){
+                    direction = "right";
+                }
+            }
+            //stop entity when it reaches the goal (if the goal is player, we don't use this)
+//            int nextCol = gp.pFinder.pathList.get(0).col;
+//            int nextRow = gp.pFinder.pathList.get(0).row;
+//            if(nextCol == goalCol && nextRow == goalRow){
+//                onPath = false;
+//            }
         }
     }
 

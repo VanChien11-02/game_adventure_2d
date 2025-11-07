@@ -15,6 +15,8 @@ public class TileManager {
     public Tile[] tile;
     //array 3D, first is save map number, 2 remaining save mapTileNum
     public int[][][] mapIileNum;
+    public boolean drawPath = false;
+
     public TileManager(GamePanel gp){
         this.gp = gp;
         tile = new Tile[50]; // create 10 tile, vd: wall, tree, water
@@ -58,6 +60,7 @@ public class TileManager {
         setup(44,"table01", true);
 
     }
+
     public void setup(int index, String imageName, boolean collision){
         UtilityTool uTool = new UtilityTool();
         try {
@@ -69,6 +72,7 @@ public class TileManager {
             e.printStackTrace();
         }
     }
+
     public void loadMap(String filepath, int map){
         try{
             InputStream ins = getClass().getResourceAsStream(filepath);
@@ -114,6 +118,18 @@ public class TileManager {
             if(col == gp.maxWorldCol){
                 col = 0;
                 row++;
+            }
+        }
+        if(drawPath){
+            g2.setColor(new Color(255,0,0,70));
+
+            for(int i=0; i<gp.pFinder.pathList.size(); i++){
+                int worldX = gp.pFinder.pathList.get(i).col * gp.tile_size;
+                int worldY = gp.pFinder.pathList.get(i).row * gp.tile_size;
+                int screenX = worldX - gp.player.worldX + gp.player.screenX;//to put player at the center
+                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+                g2.fillRect(screenX, screenY, gp.tile_size, gp.tile_size);
             }
         }
     }

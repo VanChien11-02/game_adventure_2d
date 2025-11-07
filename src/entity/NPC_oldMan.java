@@ -9,7 +9,7 @@ public class NPC_oldMan extends Entity{
     public NPC_oldMan(GamePanel gp){
         super(gp);
         direction = "down";
-        speed = 1;
+        speed = 2;
 
         solidArea = new Rectangle();
         // small hcn in side npc
@@ -40,27 +40,38 @@ public class NPC_oldMan extends Entity{
         dialogue[4] = "Goob luck on you";
     }
     public void setAction(){ //to update action in entity
-        actionLookCounter++;
-        if(actionLookCounter == 120) {
-            Random random = new Random();
-            int i = random.nextInt(100) + 1; //[1, 100]
-            if (i <= 25) {
-                direction = "up";
+        if(onPath){
+//            int goalCol = 12;
+//            int goalRow = 9;
+            int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tile_size;
+            int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tile_size;
+
+            searchPath(goalCol, goalRow);
+        } else {
+            actionLookCounter++;
+            if (actionLookCounter == 120) {
+                Random random = new Random();
+                int i = random.nextInt(100) + 1; //[1, 100]
+                if (i <= 25) {
+                    direction = "up";
+                }
+                if (i > 25 && i <= 50) {
+                    direction = "down";
+                }
+                if (i > 50 && i <= 75) {
+                    direction = "left";
+                }
+                if (i > 75) {
+                    direction = "right";
+                }
+                actionLookCounter = 0;
             }
-            if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75) {
-                direction = "right";
-            }
-            actionLookCounter = 0;
         }
     }
     public void speak(){
         // do something character specific stuff
         super.speak();
+
+        onPath = true;
     }
 }

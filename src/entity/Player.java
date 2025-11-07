@@ -45,11 +45,11 @@ public class Player extends Entity{
     public void setDefaultValues(){
 //        x = 100;
 //        y = 100;
-//        worldX = gp.tile_size * 23; // starting location of player
-//        worldY = gp.tile_size * 21;
-        worldX = gp.tile_size * 12; // starting location of player
-        worldY = gp.tile_size * 12;
-        gp.currentMap = 1;
+        worldX = gp.tile_size * 23; // starting location of player
+        worldY = gp.tile_size * 21;
+//        worldX = gp.tile_size * 12; // starting location of player
+//        worldY = gp.tile_size * 12;
+//        gp.currentMap = 1;
 
         speed = 4;
         direction = "down";

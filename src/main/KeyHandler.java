@@ -108,8 +108,10 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_T) {
             if (!showDebugText) {
                 showDebugText = true;
+                gp.tileM.drawPath = true;
             } else {
                 showDebugText = false;
+                gp.tileM.drawPath = false;
             }
         }
         if (code == KeyEvent.VK_M){ //to change some tile when play game (don't need to exit game)
