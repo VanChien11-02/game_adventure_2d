@@ -18,6 +18,7 @@ public class obj_fireball extends Projectiles {
         life = maxLife;
         attack = 2;
         costUse = 1;
+        knockBackPower = 1;
         alive = false; // just shot 1 time (when fireball shill alive, can't shoot more)
         getImage();
     }

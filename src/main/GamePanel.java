@@ -59,7 +59,8 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[][] npc = new Entity[maxMap][10];
     public Entity[][] monster = new Entity[maxMap][20];
     public InteractiveTIle[][] iTile = new InteractiveTIle[maxMap][30];
-    public ArrayList<Entity> projectileList = new ArrayList<>();
+    public Entity[][] projectileList = new Entity[maxMap][20];
+//    public ArrayList<Entity> projectileList = new ArrayList<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
     //to sort entity if the entity has lower worldY comes in index 0
@@ -225,13 +226,13 @@ public class GamePanel extends JPanel implements Runnable{
                     }
                 }
             }
-            for(int i=0; i<projectileList.size(); i++){
-                if(projectileList.get(i) != null){
-                    if(projectileList.get(i).alive && !projectileList.get(i).dying) {
-                        projectileList.get(i).update();
+            for(int i=0; i<projectileList[1].length; i++){
+                if(projectileList[currentMap][i] != null){
+                    if(projectileList[currentMap][i].alive) {
+                        projectileList[currentMap][i].update();
                     }
-                    if(!projectileList.get(i).alive){
-                        projectileList.remove(i);
+                    if(!projectileList[currentMap][i].alive){
+                        projectileList[currentMap][i] = null;
                     }
                 }
             }
@@ -292,9 +293,9 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
             //projectile
-            for (int i = 0; i < projectileList.size(); i++) {
-                if (projectileList.get(i) != null) {
-                    entityList.add(projectileList.get(i));
+            for (int i = 0; i < projectileList[1].length; i++) {
+                if (projectileList[currentMap][i] != null) {
+                    entityList.add(projectileList[currentMap][i]);
                 }
             }
             //particle

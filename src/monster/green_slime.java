@@ -16,7 +16,8 @@ public class green_slime extends Entity {
         this.gp = gp;
         type = typeMonster;
         name = "Green Slime";
-        speed = 1;
+        defaultSpeed = 1;
+        speed = defaultSpeed;
 //        monsterDamage = 1;
         maxLife = 4;
         life = maxLife;
@@ -64,6 +65,7 @@ public class green_slime extends Entity {
             onPath = false;
         }
     }
+
     public void setAction() {
         if(onPath){
             int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tile_size;
@@ -74,7 +76,15 @@ public class green_slime extends Entity {
             int i = new Random().nextInt(100)+1;
             if(i > 99 && !projectiles.alive && shotAvailableCounter >= 45){
                 projectiles.set(worldX, worldY, direction, true, this);
-                gp.projectileList.add(projectiles);
+//                gp.projectileList.add(projectiles);
+
+                //check vacancy
+                for(int j=0; j<gp.projectileList[1].length; j++){
+                    if(gp.projectileList[gp.currentMap][j] == null){
+                        gp.projectileList[gp.currentMap][j] = projectiles;
+                        break;
+                    }
+                }
                 shotAvailableCounter = 0;
             }
         } else {

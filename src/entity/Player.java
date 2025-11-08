@@ -6,7 +6,6 @@ import object.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Player extends Entity{
     KeyHandler KeyH;
@@ -42,6 +41,7 @@ public class Player extends Entity{
         getPLayerAttackImage();
         setItem();
     }
+
     public void setDefaultValues(){
 //        x = 100;
 //        y = 100;
@@ -51,7 +51,8 @@ public class Player extends Entity{
 //        worldY = gp.tile_size * 12;
 //        gp.currentMap = 1;
 
-        speed = 4;
+        defaultSpeed = 4;
+        speed = defaultSpeed;
         direction = "down";
 
         //player status
@@ -161,7 +162,7 @@ public class Player extends Entity{
             int checkObjIndex = gp.check.checkObject(this, true);
             pickUpObject(checkObjIndex);
 
-            // check npc colision
+            // check npc collision
             int checkNPCIndex = gp.check.checkEntity(this, gp.npc);
             interactNPC(checkNPCIndex);
 
@@ -227,8 +228,16 @@ public class Player extends Entity{
 
             //subtract the cost(mana,..)
             projectiles.subtractResource(this);
+
             //add it into arrayList
-            gp.projectileList.add(projectiles);
+//            gp.projectileList.add(projectiles);
+            //check vacancy
+            for(int i=0; i<gp.projectileList[1].length; i++){
+                if(gp.projectileList[gp.currentMap][i] == null){
+                    gp.projectileList[gp.currentMap][i] = projectiles;
+                    break;
+                }
+            }
             //add sound (future)
 
             shotAvailableCounter = 0;
@@ -289,12 +298,15 @@ public class Player extends Entity{
             solidArea.width = attackArea.width;
             solidArea.height = attackArea.height;
 
-            //check monster collision with the updated worldX, worldY and soildArea
+            //check monster collision with the updated worldX, worldY and solidArea
             int monsterIndex = gp.check.checkEntity(this, gp.monster);
-            damageMonster(monsterIndex, attack);
+            damageMonster(monsterIndex, attack, currentWeapon.knockBackPower);
 
             int iTileIndex = gp.check.checkEntity(this, gp.iTile);
             damageInteractiveTile(iTileIndex);
+
+            int projectileIndex = gp.check.checkEntity(this, gp.projectileList);
+            damageProjectile(projectileIndex);
 
             //reset
             worldX = currentWorldX;
@@ -306,6 +318,14 @@ public class Player extends Entity{
             attackNum = 1;
             attackCounter = 0;
             attacking = false;
+        }
+    }
+
+    public void damageProjectile(int index){
+        if(index != 999){
+            Entity projectile = gp.projectileList[gp.currentMap][index];
+            projectile.alive = false;
+            generateParticle(projectile, projectile);
         }
     }
 
@@ -350,10 +370,14 @@ public class Player extends Entity{
         }
     }
 
-    public void damageMonster(int index, int attack){
+    public void damageMonster(int index, int attack, int knockBackPower){
         if(index != 999){
           if(!gp.monster[gp.currentMap][index].invincible){
               gp.playSE(5);
+
+              if(knockBackPower > 0){
+                  knockBack(gp.monster[gp.currentMap][index], knockBackPower);
+              }
 
               int damage = attack - gp.monster[gp.currentMap][index].defense;
               if (damage < 0) {
@@ -374,6 +398,12 @@ public class Player extends Entity{
               }
           }
         }
+    }
+
+    public void knockBack(Entity entity, int knockBackPower){
+        entity.direction = direction;
+        entity.speed += knockBackPower;
+        entity.knockBack = true;
     }
 
     public void pickUpObject(int i){
@@ -533,7 +563,7 @@ public class Player extends Entity{
         //Debug: invincible
 //        g2.setFont(new Font("Arial", Font.PLAIN, 26));
 //        g2.setColor(Color.white);
-//        g2.drawString("Invincivle: " + invincibleCounter, 10, 400);
+//        g2.drawString("Invincible: " + invincibleCounter, 10, 400);
 
         // DEBUG
         // AttackArea
